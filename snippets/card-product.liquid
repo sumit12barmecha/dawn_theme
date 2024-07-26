@@ -117,6 +117,7 @@
                   height="{{ card_product.media[1].height }}"
                 >
               {%- endif -%}
+              
             </div>
           </div>
         {%- endif -%}
@@ -162,7 +163,7 @@
             {%- endif -%}
            
           {% endfor %} {% if settings.wishlist_image %}
-            <img src="{{ settings.wishlist_image | img_url: '50x' }}" alt="Wishlist" class="wishlist-image w-8">
+            <img src="{{ settings.wishlist_image | img_url: '20x' }}" alt="Wishlist" class="wishlist-image w-12">
           {% endif %}
           </div>
         </div>
@@ -183,7 +184,9 @@
             >
               {{ card_product.title | escape }}
             </a>
-            <img src="{{ settings.ATC_image | img_url: '20x' }}" alt="Add-to-cart" class="ATC-image w-8">
+            <img src="{{ settings.ATC_image | img_url: '20x' }}" alt="Add-to-cart" class="ATC-image w-12 pr-2">
+                
+            
           </h2>
           <div class="card-information">
             {%- if show_vendor -%}
@@ -339,7 +342,7 @@
               endif
             -%}
             {%- if card_product.variants.size > 1 or qty_rules -%}
-              <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
+              <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">btn
                 <button
                   id="{{ product_form_id }}-submit"
                   type="submit"
