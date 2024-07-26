@@ -534,6 +534,10 @@
         ],
         "default": "left",
         "label": "t:settings_schema.global.settings.text_alignment.label"
+      },{
+        "type": "image_picker",
+        "id": "ATC_image",
+        "label": "atc Image"
       },
       {
         "type": "color_scheme",
@@ -1265,9 +1269,15 @@
         "id": "sold_out_badge_color_scheme",
         "label": "t:settings_schema.badges.settings.sold_out_badge_color_scheme.label",
         "default": "scheme-3"
+      },
+      {
+        "type": "image_picker",
+        "id": "wishlist_image",
+        "label": "Wishlist Image"
       }
     ]
-  },
+  }
+,  
   {
     "name": "t:settings_schema.brand_information.name",
     "settings": [

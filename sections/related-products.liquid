@@ -1,7 +1,11 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{% comment %} {{ 'flickity.css' | asset_url | stylesheet_tag }} {% endcomment %}
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
+
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer="defer"></script>
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
@@ -23,34 +27,67 @@
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <product-recommendations
     class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+
     data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}"
   >
     {% comment %} {% if recommendations.performed and recommendations.products_count > 0 %} {% endcomment %}
-      <h2 class=" text-blue-600 related-products__heading inline-richtext {{ section.settings.heading_size }}">
-        {{ section.settings.heading }}
-      </h2>
-      <ul
-        class="flex flex-wrap justify-between product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
-        role="list"
-      >
-        {% assign skip_card_product_styles = false %}
-        {% for recommendation in recommendations.products %}
-          <li class="grid__item">
-            {% render 'card-product',
-              card_product: recommendation,
-              media_aspect_ratio: section.settings.image_ratio,
-              image_shape: section.settings.image_shape,
-              show_secondary_image: section.settings.show_secondary_image,
-              show_vendor: section.settings.show_vendor,
-              show_rating: section.settings.show_rating,
-              skip_styles: skip_card_product_styles
-            %}
-          </li>
-          {%- assign skip_card_product_styles = true -%}
-        {% endfor %}
-      </ul>
+    <div class="related-product-heading flex flex-row text-center justify-start items-center my-12">
+      <h2 class="text-blue-custom text-6xl inline-richtext mx-5">{{ section.settings.heading }}</h2>
+      <div id="shopAlldivDesktop" class="flex flex-row w-4/6 text-center justify-end items-center ">
+        <div
+          class="m-2 flex text-transparent border-t-0 "
+          style="background-color: {{ section.settings.line_color }}; width: {% if section.settings.show_shop_all %} {{ section.settings.width_enabled }}% {% else %} {{ section.settings.width_disabled }}% {% endif %}; height: 0.15rem;"
+        >
+          s
+        </div>
+
+        {% if section.settings.show_shop_all %}
+          <a
+            class="flex flex-row items-center  "
+            href="{{ section.settings.shop_all_url }}"
+            style="color: {{ section.settings.link_color }};"
+          >
+            {{ section.settings.link_text }}
+            <svg
+              class="w-10 ml-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="{{ section.settings.icon_color }}"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M6 18L18 6M18 6H9M18 6V15" stroke="{{ section.settings.icon_color }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    <ul
+      class="main-carousel flex flex-wrap justify-between"
+      role="list"
+    >
+      {% assign skip_card_product_styles = false %}
+      {% for recommendation in recommendations.products %}
+        <li class="carousel-cell w-3/12">
+          {% render 'card-product',
+            card_product: recommendation,
+            media_aspect_ratio: section.settings.image_ratio,
+            image_shape: section.settings.image_shape,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            show_rating: section.settings.show_rating,
+            skip_styles: skip_card_product_styles
+          %}
+        </li>
+        {%- assign skip_card_product_styles = true -%}
+      {% endfor %}
+    </ul>
+    <div id="shopAlldivMobile"></div>
     {% comment %} {% endif %} {% endcomment %}
   </product-recommendations>
   {% if section.settings.image_shape == 'arch' %}
@@ -68,56 +105,78 @@
       "type": "paragraph",
       "content": "t:sections.related-products.settings.paragraph__1.content"
     },
+
     {
       "type": "inline_richtext",
       "id": "heading",
-      "default": "t:sections.related-products.settings.paragraph__1.default",
-      "label": "t:sections.related-products.settings.heading.label"
+      "label": "Heading Text",
+      "default": "Related Products"
     },
     {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
-        },
-        {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        },
-        {
-          "value": "hxl",
-          "label": "t:sections.all.heading_size.options__4.label"
-        },
-        {
-          "value": "hxxl",
-          "label": "t:sections.all.heading_size.options__5.label"
-        }
-      ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
+      "type": "text",
+      "id": "link_text",
+      "label": "Link Text",
+      "default": "Shop All"
     },
+    {
+      "type": "url",
+      "id": "shop_all_url",
+      "label": "Shop All URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shop_all",
+      "label": "Show Shop All Section",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line Color",
+      "default": "#FDBA74"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link Text Color",
+      "default": "#F97316"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#FF6932"
+    },
+    {
+      "type": "number",
+      "id": "width_enabled",
+      "label": "Line Width When Enabled (%)",
+      "default": 62
+    },
+    {
+      "type": "number",
+      "id": "width_disabled",
+      "label": "Line Width When Disabled (%)",
+      "default": 70
+    },
+    //
     {
       "type": "range",
       "id": "products_to_show",
       "min": 2,
       "max": 10,
       "step": 1,
-      "default": 4,
+      "default": 8,
       "label": "t:sections.related-products.settings.products_to_show.label"
     },
     {
       "type": "range",
       "id": "columns_desktop",
       "min": 1,
-      "max": 6,
+      "max": 8,
       "step": 1,
-      "default": 4,
+      "default": 8,
       "label": "t:sections.related-products.settings.columns_desktop.label"
     },
     {
@@ -258,3 +317,33 @@
   ]
 }
 {% endschema %}
+<script defer>
+  console.log('scripts running 1');
+  var elem = document.querySelector('.main-carousel');
+  var flkty = new Flickity(elem, {
+    // options
+    cellAlign: 'left',
+    contain: true,
+  });
+
+  // element argument can be a selector string
+  //   for an individual element
+  var flkty = new Flickity('.main-carousel', {
+    // options
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+    // Function to check if the screen width is mobile size
+    function isMobileDevice() {
+      return window.innerWidth <= 768;
+    }
+    console.log('running 2 ');
+    // Move content if screen is mobile size
+    if (isMobileDevice()) {
+      var desktopDiv = document.getElementById('shopAlldivDesktop');
+      var mobileDiv = document.getElementById('shopAlldivMobile');
+      var content = desktopDiv.innerHTML;
+      desktopDiv.innerHTML = '';
+      mobileDiv.innerHTML = content;
+    }
+  });
+</script>
