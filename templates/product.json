@@ -96,6 +96,8 @@
         "line_color": "#fdba74",
         "link_color": "#f97316",
         "icon_color": "#ff6932",
+        "products_to_show": 4,
+        "columns_desktop": 8,
         "color_scheme": "scheme-1",
         "image_ratio": "square",
         "image_shape": "default",
