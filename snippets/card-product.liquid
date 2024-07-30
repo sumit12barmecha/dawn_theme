@@ -62,16 +62,16 @@
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
             <div class="media media--transparent media--hover-effect">
               <div class=" product-card__tags">
-                {% for tag in product.tags %}
+                {% comment %} {% for tag in product.tags %}
                   {% if tag == 'bestSeller' %}
                     <span class="product-card__tag product-card__tag--best-seller">
-                      <img src="{{ 'best-seller.svg' | asset_url }}" alt="Best Seller" class="inline-block w-6 h-6">
+                      <img src="{{ 'bestSeller.svg' | asset_url }}" alt="Best Seller" class="inline-block " width="1.6rem" height="1.6rem">
                     </span>
                   {% endif %}
                   {% if tag == '50% Off' %}
                     <span class="product-card__tag product-card__tag--50-off"> 50% Off </span>
                   {% endif %}
-                {% endfor %}
+                {% endfor %} {% endcomment %}
               </div>
               {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
               <img
@@ -183,7 +183,7 @@
               {{ card_product.title | escape }}
             </a>
             {% comment %} <img src="{{ settings.ATC_image | img_url: '20x' }}" alt="Add-to-cart" class="ATC-image w-12 pr-2"> {% endcomment %}
-            <img src="{{ 'plus-svgrepo-com.svg' | asset_url }}" alt="Best Seller" class="inline-block " width="25px" height="25px">
+            <img src="{{ 'plus-svgrepo-com.svg' | asset_url }}" alt="Best Seller" class="inline-block  mr-2" width="25px" height="25px">
           </h2>
           <div class="card-information">
             {%- if show_vendor -%}

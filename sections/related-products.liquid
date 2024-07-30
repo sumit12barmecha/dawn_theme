@@ -1,10 +1,7 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
-{{ 'flickity.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
-
-<script src="{{ 'flickity.pkgd.min.js' | asset_url }}" defer="defer"></script>
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
@@ -24,54 +21,55 @@
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
- 
-    {% comment %} {% if recommendations.performed and recommendations.products_count > 0 %} {% endcomment %}
-    <div class="page-width">
+  <div class="page-width">
     <div class="related-product-heading flex flex-row text-center justify-start items-center my-12">
-        <h2 class="text-blue-custom text-6xl inline-richtext mx-5">{{ section.settings.heading }}</h2>
-<div id="shopAlldivDesktop" class="flex flex-row w-4/6 text-center justify-end items-center ">
-
-
-        <div 
-        class="shopAllLine m-2 flex text-transparent border-t-0 "
-        style="background-color: {{ section.settings.line_color }}; width: {% if section.settings.show_shop_all %} 85% {% else %} 100% {% endif %}; height: 0.15rem;"
-      >
-        s
-      </div>
+      <h2 class="text-blue-custom text-6xl inline-richtext mx-5">{{ section.settings.heading }}</h2>
+      <div id="shopAlldivDesktop" class="flex flex-row w-4/6 text-center justify-end items-center ">
+        <div
+          class="shopAllLine m-2 flex text-transparent border-t-0 "
+          style="background-color: {{ section.settings.line_color }}; width: {% if section.settings.show_shop_all %} 85% {% else %} 100% {% endif %}; height: 0.15rem;"
+        >
+          s
+        </div>
 
         {% if section.settings.show_shop_all %}
-          <a 
+          <a
             class="flex flex-row items-center text-nowrap  "
             href="{{ section.settings.shop_all_url }}"
             style="color: {{ section.settings.link_color }};"
           >
             {{ section.settings.link_text }}
-            <svg class="w-10 ml-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="{{ section.settings.icon_color }}">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-            <g id="SVGRepo_iconCarrier">
-              <path d="M6 18L18 6M18 6H9M18 6V15" stroke="{{ section.settings.icon_color }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            </g>
-          </svg>
+            <svg
+              class="w-10 ml-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="{{ section.settings.icon_color }}"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M6 18L18 6M18 6H9M18 6V15" stroke="{{ section.settings.icon_color }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
           </a>
         {% endif %}
-        </div>
-    </div></div>
-    <product-recommendations
-  class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-
-  data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
-  data-section-id="{{ section.id }}"
-  data-product-id="{{ product.id }}"
-> 
+      </div>
+    </div>
+  </div>
+  <product-recommendations
+    class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+  >   {% if recommendations.performed and recommendations.products_count > 0 %}
     <ul
-      class="main-carousel flex flex-row flex-wrap justify-between"
-      role="list" 
-      
+      class=" flex flex-row justify-between"
+      role="list"
     >
       {% assign skip_card_product_styles = false %}
       {% for recommendation in recommendations.products %}
-        <li class="carousel-cell sm:w-3/12 w-full">
+        <li class=" sm:w-3/12 w-full">
           {% render 'card-product',
             card_product: recommendation,
             media_aspect_ratio: section.settings.image_ratio,
@@ -80,15 +78,14 @@
             show_vendor: section.settings.show_vendor,
             show_rating: section.settings.show_rating,
             skip_styles: skip_card_product_styles,
-            quick_add:true
+            quick_add: true
           %}
         </li>
         {%- assign skip_card_product_styles = true -%}
       {% endfor %}
     </ul>
- 
-    {% comment %} {% endif %} {% endcomment %}
-  </product-recommendations> 
+    {% endif %}
+  </product-recommendations>
 
   {% if section.settings.image_shape == 'arch' %}
     {% render 'mask-arch' %}
@@ -105,7 +102,7 @@
       "type": "paragraph",
       "content": "t:sections.related-products.settings.paragraph__1.content"
     },
-    
+
     {
       "type": "inline_richtext",
       "id": "heading",
@@ -148,8 +145,24 @@
       "label": "Icon Color",
       "default": "#FF6932"
     },
-    
-    
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 8,
+      "label": "t:sections.related-products.settings.products_to_show.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 8,
+      "label": "t:sections.related-products.settings.columns_desktop.label"
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",
@@ -289,25 +302,14 @@
 }
 {% endschema %}
 <script defer>
-  console.log("scripts running 1")
-var elem = document.querySelector('.main-carousel');
-var flkty = new Flickity( elem, {
-  // options
-  cellAlign: 'left',
-  contain: true
-});
+  // This function moves the "Shop All" line to the end of the section for mobile view based on the Figma design
+  document.addEventListener('DOMContentLoaded', function () {
 
-// element argument can be a selector string
-//   for an individual element
-var flkty = new Flickity( '.main-carousel', {
-  // options
-});
-document.addEventListener('DOMContentLoaded', function() {
     // Function to check if the screen width is mobile size
     function isMobileDevice() {
       return window.innerWidth <= 768;
     }
-console.log("running 2")
+    console.log('running 2');
     // Move content if screen is mobile size
     if (isMobileDevice()) {
       var desktopDiv = document.getElementById('shopAlldivDesktop');
