@@ -97,7 +97,7 @@
         "link_color": "#f97316",
         "icon_color": "#ff6932",
         "color_scheme": "scheme-1",
-        "image_ratio": "portrait",
+        "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
