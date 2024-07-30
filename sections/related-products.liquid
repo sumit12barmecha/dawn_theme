@@ -67,6 +67,7 @@
     <ul
       class="main-carousel flex flex-row flex-wrap justify-between"
       role="list" 
+      
     >
       {% assign skip_card_product_styles = false %}
       {% for recommendation in recommendations.products %}
@@ -148,25 +149,7 @@
       "default": "#FF6932"
     },
     
-    // 
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 2,
-      "max": 10,
-      "step": 1,
-      "default": 8,
-      "label": "t:sections.related-products.settings.products_to_show.label"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 8,
-      "step": 1,
-      "default": 8,
-      "label": "t:sections.related-products.settings.columns_desktop.label"
-    },
+    
     {
       "type": "color_scheme",
       "id": "color_scheme",

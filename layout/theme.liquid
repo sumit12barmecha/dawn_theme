@@ -255,7 +255,7 @@
     {% endstyle %}
 
 {{ 'base.css' | asset_url | stylesheet_tag }}
-{{ 'output.css' | asset_url | stylesheet_tag }}
+
 
     {%- unless settings.type_body_font.system? -%}
       {% comment %}theme-check-disable AssetPreload{% endcomment %}
@@ -287,6 +287,7 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    {{ 'output.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

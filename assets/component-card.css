@@ -123,7 +123,7 @@
 }
 
 .card__content {
-  display: grid;
+
   grid-template-rows: minmax(0, 1fr) max-content minmax(0, 1fr);
   padding: 1rem;
   width: 100%;
@@ -271,7 +271,7 @@
 }
 
 .card__badge {
-  align-self: flex-end;
+  align-self: flex-start;
   grid-row-start: 3;
   justify-self: flex-start;
 }

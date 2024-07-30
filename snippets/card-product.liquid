@@ -42,7 +42,8 @@
   -%}
   <div class="card-wrapper product-card-wrapper underline-links-hover">
     <div
-      class="p-1.5
+      class="
+        p-1.5
         card card--{{ settings.card_style }}
         {% if card_product.featured_media %} card--media{% else %} card--text{% endif %}
         {% if settings.card_style == 'card' %} color-{{ settings.card_color_scheme }} gradient{% endif %}
@@ -61,19 +62,17 @@
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
             <div class="media media--transparent media--hover-effect">
               <div class=" product-card__tags">
-        {% for tag in product.tags %}
-          {% if tag == 'bestSeller' %}
-            <span class="product-card__tag product-card__tag--best-seller">
-              <img src="{{ 'best-seller.svg' | asset_url }}" alt="Best Seller" class="inline-block w-6 h-6">
-            </span>
-          {% endif %}
-          {% if tag == '50% Off' %}
-            <span class="product-card__tag product-card__tag--50-off">
-              50% Off
-            </span>
-          {% endif %}
-        {% endfor %}
-      </div>
+                {% for tag in product.tags %}
+                  {% if tag == 'bestSeller' %}
+                    <span class="product-card__tag product-card__tag--best-seller">
+                      <img src="{{ 'best-seller.svg' | asset_url }}" alt="Best Seller" class="inline-block w-6 h-6">
+                    </span>
+                  {% endif %}
+                  {% if tag == '50% Off' %}
+                    <span class="product-card__tag product-card__tag--50-off"> 50% Off </span>
+                  {% endif %}
+                {% endfor %}
+              </div>
               {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
               <img
                 srcset="
@@ -117,13 +116,11 @@
                   height="{{ card_product.media[1].height }}"
                 >
               {%- endif -%}
-              
             </div>
           </div>
         {%- endif -%}
-        <div class="card__content">
+        <div class="flex card__content ">
           <div class="card__information">
-           
             <h3
               class="card__heading"
               {% if card_product.featured_media == null and settings.card_style == 'standard' %}
@@ -138,33 +135,34 @@
               >
                 {{ card_product.title | escape }}
               </a>
-             
             </h3>
           </div>
-          <div class="card__badge w-full flex justify-between {{ settings.badge_position }}">
-            {%for tag in card_product.tags %}
-
-            {%- if tag == "bestSeller" -%}
-              <span
-                id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
-                class=" badge--bottom-left text-blue-custom bg-yellow-50 badge font-semibold rounded-none border-none	"
-              >
-                {{- 'products.product.Best_seller' | t -}}
-              </span>
-              {%- elsif tag == "50% Off" -%}
-              <span
-                id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
-                class=" badge--bottom-left text-white bg-pink-500  badge"
-              >
-                {{- 'products.product.50_off' | t -}}
-              </span>
-              {%  else %}
-              <span></span>
-            {%- endif -%}
-           
-          {% endfor %} {% if settings.wishlist_image %}
-            <img src="{{ settings.wishlist_image | img_url: '20x' }}" alt="Wishlist" class="wishlist-image w-12">
-          {% endif %}
+          <div class="card__badge w-full flex justify-between Top left">
+            {% for collection  in card_product.collections %}
+              
+              {% if collection.title == "Best Sellers" %}
+                <span
+                  id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
+                  class=" badge--bottom-left text-blue-custom bg-yellow-50 badge font-semibold rounded-none border-none	"
+                >
+                  {{- 'products.product.Best_seller' | t -}}
+                </span>
+              {%- endif -%}
+            
+              {% if collection.title == "50%Off" %}
+                <span
+                  id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
+                  class=" badge--bottom-left text-white bg-pink-500  badge"
+                >
+                  {{- 'products.product.50_off' | t -}}
+                </span>
+              {% else %}
+                <span></span>
+              {%- endif -%}
+            {% endfor %}
+       
+              <img src="{{ 'heart-svgrepo-com.svg' | asset_url }}" alt="Best Seller" class="inline-block" width="25px" height="25px">
+         
           </div>
         </div>
       </div>
@@ -184,9 +182,8 @@
             >
               {{ card_product.title | escape }}
             </a>
-            <img src="{{ settings.ATC_image | img_url: '20x' }}" alt="Add-to-cart" class="ATC-image w-12 pr-2">
-                
-            
+            {% comment %} <img src="{{ settings.ATC_image | img_url: '20x' }}" alt="Add-to-cart" class="ATC-image w-12 pr-2"> {% endcomment %}
+            <img src="{{ 'plus-svgrepo-com.svg' | asset_url }}" alt="Best Seller" class="inline-block " width="25px" height="25px">
           </h2>
           <div class="card-information">
             {%- if show_vendor -%}
@@ -234,21 +231,21 @@
 
             {% render 'price', product: card_product, price_class: 'text-blue-custom', show_compare_at_price: true %}
             {% assign colors = '' %}
-{% assign unique_colors = '' %}
+            {% assign unique_colors = '' %}
 
-{% for variant in card_product.variants %}
-  {% assign color = variant.option1 %}
-  {% unless unique_colors contains color %}
-    {% assign unique_colors = unique_colors | append: color | append: ',' %}
-  {% endunless %}
-{% endfor %}
+            {% for variant in card_product.variants %}
+              {% assign color = variant.option1 %}
+              {% unless unique_colors contains color %}
+                {% assign unique_colors = unique_colors | append: color | append: ',' %}
+              {% endunless %}
+            {% endfor %}
 
-{% assign unique_colors_array = unique_colors | split: ',' %}
-{% assign unique_colors_count = unique_colors_array.size | minus: 1 %}
-<hr class="my-7 h-0.5 border-t-0 bg-blue-100 " />
-{% if unique_colors_count>0 %}
-<p class="text-blue-custom">{{ unique_colors_count }} colors available</p>
-{% endif %}
+            {% assign unique_colors_array = unique_colors | split: ',' %}
+            {% assign unique_colors_count = unique_colors_array.size | minus: 1 %}
+            <hr class="my-7 h-0.5 border-t-0 bg-blue-100 ">
+            {% if unique_colors_count > 0 %}
+              <p class="text-blue-custom">{{ unique_colors_count }} colors available</p>
+            {% endif %}
             {%- if card_product.quantity_price_breaks_configured? -%}
               {% if card_product.variants.size == 1 and quick_add == 'bulk' %}
                 {% liquid
@@ -342,7 +339,8 @@
               endif
             -%}
             {%- if card_product.variants.size > 1 or qty_rules -%}
-              <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">btn
+              <modal-opener data-modal="#QuickAdd-{{ card_product.id }}"
+                >btn
                 <button
                   id="{{ product_form_id }}-submit"
                   type="submit"
@@ -552,7 +550,9 @@
                         <a href="{{ card_product.url }}" class="full-unstyled-link">
                           <h3>{{ card_product.title | escape }}</h3>
                         </a>
-                        <script> const product  = {{ card_product }};console.log(product)</script>
+                        <script>
+                          const product  = {{ card_product }};console.log(product)
+                        </script>
                         {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
                         {%- if card_product.quantity_price_breaks_configured? -%}
                           <div class="card__information-volume-pricing-note">
@@ -589,7 +589,7 @@
             </div>
           {% endif %}
         {% endif %}
-        <div class="card__badge {{ settings.badge_position }}">
+        <div class="card__badge Top left">
           {%- if card_product.available == false -%}
             <span
               id="Badge-{{ section_id }}-{{ card_product.id }}"
@@ -605,7 +605,6 @@
               {{- 'products.product.on_sale' | t -}}
             </span>
           {%- endif -%}
-          
         </div>
       </div>
     </div>
@@ -619,13 +618,13 @@
   -%}
   <div class="card-wrapper product-card-wrapper underline-links-hover">
     {% for tag in card_product.tags %}
-      {% if tag == "bestSeller" %}
+      {% if tag == 'bestSeller' %}
         <div class="mt-4 py-1 px-2 absolute text-blue-custom bg-yellow-50 text-sm best-seller">Best Seller</div>
-      {% endif%}
-      {% if tag == "50% Off" %}
+      {% endif %}
+      {% if tag == '50% Off' %}
         <div class="mt-4 py-1 px-2 absolute  text-sm best-seller">50% Off</div>
-      {% endif%}
-     {% endfor %}
+      {% endif %}
+    {% endfor %}
     <div
       class="
         card card--{{ settings.card_style }}
